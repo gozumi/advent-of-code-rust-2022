@@ -1,13 +1,15 @@
-pub enum Node {
+pub enum Node<'a> {
     DirectoryNode {
         directoryName: String,
         size: i32,
-        children: Vec<Node>
+        children: Vec<Node<'a>>,
+        parent: &'a  Node<'a>
     },
     FileNode {
         fileName: String,
         size: i32,
-    }
+    },
+    None
 }
 
 #[derive(Debug)]
@@ -44,16 +46,14 @@ pub fn get_input_line(raw_input: &str) -> LineOutput {
 }
 
 pub fn print_directory_tree(node: Node) {
-    println!("=================================");
-    println!("Directory tree");
-    println!("=================================");
     match node {
-        Node::DirectoryNode { directoryName, size, children } => {
+        Node::DirectoryNode { directoryName, size, children, parent } => {
             println!("{}", directoryName);
             for n in children  {
                 print_directory_tree(n)
             }
         },
-        Node::FileNode { fileName, size } => println!("{} {}", fileName, size)
+        Node::FileNode { fileName, size } => println!("{} {}", fileName, size),
+        Node::None => todo!(),
     }
 }
